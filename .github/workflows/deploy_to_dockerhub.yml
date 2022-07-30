@@ -12,19 +12,21 @@ name: Publish Docker image
 # with protected branches this translates to PR merge request as of 30.07.2022 there is no better way of establishing that
 on: 
   push:
-    tags:
-      - '[0-9]*.[0-9]*.[0-9]*'
+    branches:
+      - master
+      - stage
+      - prod
 
 jobs:
-# skip if push event with semantic versioning tags is not either master, stage or prod.
+# skip if push event does not contain tag
   push_to_registry:
-    if: ${{ github.ref_name == 'master' }} || ${{ github.ref_name == 'stage' }} || ${{ github.ref_name == 'prod' }}
+    if: ${{ github.ref_type == 'tag' }}
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      # test comment 2
+        
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
@@ -40,7 +42,7 @@ jobs:
             latest=false 
           tags: |
             type=semver,pattern={{version}}
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'master') }} 
+            type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=stage,enable=${{ github.ref == format('refs/heads/{0}', 'stage') }}
             type=raw,value=prod,enable=${{ github.ref == format('refs/heads/{0}', 'prod') }}
           
