@@ -38,6 +38,7 @@ jobs:
           images: gitarplayer/ghost-az-ai
           flavor: |
             latest=false 
+          # hardcode latest because if PR merge push contains tag then there is no branch name in the input vars
           tags: |
             type=raw,value=prod,enable=true
           
