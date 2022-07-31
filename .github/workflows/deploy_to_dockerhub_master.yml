@@ -12,8 +12,6 @@ name: Publish Docker image
 # with protected branches this translates to PR merge request as of 30.07.2022 there is no better way of establishing that
 on: 
   push:
-    branches:
-      - master
 
 jobs:
 # skip if push event does not contain tag
