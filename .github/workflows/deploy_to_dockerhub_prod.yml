@@ -11,14 +11,13 @@ name: Publish Docker image prod tag
 
 # with protected branches this translates to PR merge request as of 30.07.2022 there is no better way of establishing that
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    types:
+      - closed
 
 jobs:
-# skip if push event does not contain tag
   push_to_registry:
-    if: endsWith( github.event.base_ref, 'prod')
+    if: github.event.pull_request.merged == true && endsWith( github.ref, 'prod' )
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
