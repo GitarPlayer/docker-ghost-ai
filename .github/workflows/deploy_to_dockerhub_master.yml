@@ -10,15 +10,14 @@
 name: Publish Docker image
 
 # with protected branches this translates to PR merge request as of 30.07.2022 there is no better way of establishing that
-on: 
+on:
   push:
-    branches:
-      - master
-
+    tags:
+      - '[0-9]*.[0-9]*.[0-9]*.'
 jobs:
 # skip if push event does not contain tag
   push_to_registry:
-    # if: contains( github.ref, 'tag')
+    if: contains( github.ref, 'master')
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
