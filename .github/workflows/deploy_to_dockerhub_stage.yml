@@ -11,17 +11,30 @@ name: Publish Docker image stage tag
 
 # with protected branches this translates to PR merge request as of 30.07.2022 there is no better way of establishing that
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    types:
+      - closed
 
 jobs:
-# skip if push event does not contain tag
   push_to_registry:
-    if: endsWith( github.event.base_ref, 'stage')
+    if: github.event.pull_request.merged == true && 
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
+
       - name: Check out the repo
         uses: actions/checkout@v3
 
@@ -49,3 +62,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
