@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Publish Docker image
+name: Publish Docker image prod tag
 
 # with protected branches this translates to PR merge request as of 30.07.2022 there is no better way of establishing that
 on:
